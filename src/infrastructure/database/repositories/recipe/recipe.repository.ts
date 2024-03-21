@@ -1,44 +1,44 @@
-import { BookCreateRaw, BookNotFoundError, BookRaw, IBookRepository } from '../../../../contexts/book'
-import { Book, BookUpdate } from '../../../../contexts/book/domains/types'
+import { RecipeCreateRaw, RecipeNotFoundError, RecipeRaw, IRecipeRepository } from '../../../../contexts/recipe'
+import { Recipe, RecipeUpdate } from '../../../../contexts/recipe/domains/types'
 import { RelationalDatabase } from '../../database'
-import { toBookRaw } from './recipe.mapper'
+import { toRecipeRaw } from './recipe.mapper'
 import { Prisma } from '@prisma/client'
 
-export class BookRepository implements IBookRepository {
+export class RecipeRepository implements IRecipeRepository {
   constructor(private readonly database: RelationalDatabase) { }
 
-  async addBook(book: BookCreateRaw): Promise<BookRaw> {
-    const newBook = await this.database.client.book.create({
-      data: book,
+  async addRecipe(recipe: RecipeCreateRaw): Promise<RecipeRaw> {
+    const newRecipe = await this.database.client.recipe.create({
+      data: recipe,
       include: {
-        author: true // Return all fields
+        chef: true // Return all fields
       }
     })
-    return toBookRaw(newBook)
+    return toRecipeRaw(newRecipe)
   }
 
-  async getAllBooks(): Promise<BookRaw[]> {
-    const books = await this.database.client.book.findMany({
+  async getAllRecipes(): Promise<RecipeRaw[]> {
+    const recipes = await this.database.client.recipe.findMany({
       include: {
-        author: true // Return all fields
+        chef: true // Return all fields
       }
     })
-    return books.map(toBookRaw)
+    return recipes.map(toRecipeRaw)
   }
 
-  async getBook(id: string): Promise<Book | null> {
-    const book = await this.database.client.book.findUnique({ where: { id }, include: { author: true } })
-    return book ? toBookRaw(book) : null
+  async getRecipe(id: string): Promise<Recipe | null> {
+    const recipe = await this.database.client.recipe.findUnique({ where: { id }, include: { chef: true } })
+    return recipe ? toRecipeRaw(recipe) : null
   }
 
-  async deleteBook(id: string): Promise<void> {
+  async deleteRecipe(id: string): Promise<void> {
     try {
-      await this.database.client.book.delete({ where: { id } })
+      await this.database.client.recipe.delete({ where: { id } })
     } catch (error) {
       // 2 façon de traiter le sujet, soit on envoie une erreur si le livre n'existe pas, sinon on ne fait rien.
       // if (error instanceof Prisma.PrismaClientKnownRequestError) {
       //   if (error.code === 'P2025') {
-      //     throw new BookNotFoundError(id)
+      //     throw new RecipeNotFoundError(id)
       //   }
       // } else {
       //   throw error
@@ -49,12 +49,12 @@ export class BookRepository implements IBookRepository {
     }
   }
 
-  async updateBook(book: BookUpdate): Promise<Book> {
-    const bookUpdated = await this.database.client.book.update({
-      where: { id: book.id },
-      data: book,
-      include: { author: true }
+  async updateRecipe(recipe: RecipeUpdate): Promise<Recipe> {
+    const recipeUpdated = await this.database.client.recipe.update({
+      where: { id: recipe.id },
+      data: recipe,
+      include: { chef: true }
     })
-    return toBookRaw(bookUpdated)
+    return toRecipeRaw(recipeUpdated)
   }
 }

@@ -1,2 +1,2 @@
-export * from './book.injector'
-export * from './i-book-repository'
+export * from './recipe.injector'
+export * from './i-recipe-repository'

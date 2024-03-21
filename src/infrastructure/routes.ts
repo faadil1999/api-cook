@@ -1,9 +1,9 @@
 import { Router } from 'express'
 import { Config } from '../config'
-import { BookExternalDependencies, recipeInjector } from '../contexts/recipe/infrastructure/recipe.injector'
+import { RecipeExternalDependencies, recipeInjector } from '../contexts/recipe/infrastructure/recipe.injector'
 import { chefInjector } from '../contexts/chef'
 
-export type ExternalDependencies = BookExternalDependencies
+export type ExternalDependencies = RecipeExternalDependencies
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getRoutes: GetRoutes = (externalDependencies: ExternalDependencies): Router[] => {

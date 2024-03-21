@@ -1,4 +1,3 @@
-import { Chef } from './../../recipe/domains/types/book';
 import { Chef, ChefCreate } from '../domains/types'
 
 export type chefRaw = Chef

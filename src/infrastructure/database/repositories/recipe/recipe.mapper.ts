@@ -1,14 +1,14 @@
-import { Author, Book } from '@prisma/client'
-import { BookRaw } from '../../../../contexts/book'
+import { Chef, Recipe } from '@prisma/client'
+import { RecipeRaw } from '../../../../contexts/recipe'
 
-export function toBookRaw(book: Book & { author: Author }): BookRaw {
+export function toRecipeRaw(recipe: Recipe & { chef: Chef }): RecipeRaw {
   return {
-    id: book.id,
-    title: book.title,
-    description: book.description,
-    author: {
-      id: book.author.id,
-      name: book.author.name
+    id: recipe.id,
+    title: recipe.name,
+    description: recipe.description,
+    chef: {
+      id: recipe.chef.id,
+      first_name: recipe.chef.first_name
     }
   }
 }
