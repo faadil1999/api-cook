@@ -16,5 +16,5 @@ export const chefInjector = (externalDependencies: ChefExternalDependencies): Ro
 
   const chefController = new ChefController(getChefsUseCase, addChefUseCase)
 
-  return chefRoutes(ChefController)
+  return chefRoutes(chefController)
 }

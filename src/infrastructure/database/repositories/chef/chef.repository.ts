@@ -6,12 +6,12 @@ export class ChefRepository implements IChefRepository {
   constructor(private readonly database: RelationalDatabase) {}
 
   async addChef(chef: ChefCreateRaw): Promise<ChefRaw> {
-    const newChef = await this.database.client.chef.create({ data: chef, include: { recipe: true } })
+    const newChef = await this.database.client.chef.create({ data: chef, include: { recipes: true } })
     return toChefRaw(newChef)
   }
 
   async getAllChefs(): Promise<ChefRaw[]> {
-    const Chefs = await this.database.client.chef.findMany({ include: { recipe: true } })
+    const Chefs = await this.database.client.chef.findMany({ include: { recipes: true } })
     return Chefs.map(toChefRaw)
   }
 }

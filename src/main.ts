@@ -1,5 +1,5 @@
 import { config } from './config'
-import { RelationalDatabase } from './infrastructure/database'
+import { RelationalDatabase } from './infrastructure/database/database'
 import { ExternalDependencies } from './infrastructure/routes'
 import { Server } from './infrastructure/server'
 ;(async () => {

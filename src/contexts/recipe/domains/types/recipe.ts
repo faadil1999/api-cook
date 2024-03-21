@@ -1,6 +1,9 @@
 export type Chef = {
   id: string
-  name: string
+  first_name: string
+  last_name: string
+  phone: string
+  country: string 
 }
 
 export type Recipe = {
