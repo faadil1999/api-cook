@@ -12,16 +12,15 @@ const recipeCreateSchema = {
     name: {
       type: "string"
     },
-    chefId: {
+    description: {
       type: "string"
     },
-    description: {
+    chefId: {
       type: "string"
     },
   },
   required: ["name", "chefId", "description"]
 }
-
 export class RecipeController {
   constructor(
     private readonly getRecipesUseCase: GetRecipesUseCase,

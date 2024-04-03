@@ -1,4 +1,4 @@
-import { Recipe } from './recipe'
+import { Recipe } from "@prisma/client"
 
 export type Chef = {
   id: string
