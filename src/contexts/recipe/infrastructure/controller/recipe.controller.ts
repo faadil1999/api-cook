@@ -40,6 +40,7 @@ export class RecipeController {
   // Add recipe to db
   async addRecipe(req: Request, res: Response) {
     // mettre une validation pour chaque endpoint, bien gérer l'objet d'erreur (ici fait un peu à la va vite)
+    console.log(res);
     const result = validate(req.body, recipeCreateSchema)
     if (!result.valid) {
       const errors = result.errors.map((error: ValidationError) => {
