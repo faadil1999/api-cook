@@ -9,17 +9,17 @@ const recipeCreateSchema = {
   id: "/Recipe",
   type: "object",
   properties: {
-    title: {
+    name: {
       type: "string"
     },
-    authorId: {
+    chefId: {
       type: "string"
     },
     description: {
       type: "string"
     },
   },
-  required: ["title", "authorId", "description"]
+  required: ["name", "chefId", "description"]
 }
 
 export class RecipeController {
