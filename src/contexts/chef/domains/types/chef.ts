@@ -10,3 +10,4 @@ export type Chef = {
 }
 
 export type ChefCreate = Omit<Chef, 'id' | 'recipes'>
+export type ChefUpdate = Omit<Chef, 'chef'>

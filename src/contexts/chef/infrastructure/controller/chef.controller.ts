@@ -1,8 +1,8 @@
+import { UpdateChefUseCase } from './../../use-cases/update-chef/update-chef.use-case';
 import { Request, Response } from 'express'
 import { AddChefUseCase, GetChefsUseCase } from '../../use-cases'
 import { GetChefUseCase } from '../../use-cases/get-chef'
 import { DeleteChefUseCase } from '../../use-cases/delete-chef'
-import { UpdateChefUseCase } from '../../use-cases/update-chef'
 
 const chefCreateSchema = {
   id: "/Chef",
@@ -55,7 +55,34 @@ export class ChefController {
       ])
     }
   }
+
+   // Get on chef by id
+   async getChef(req: Request, res: Response) {
+    try {
+      
+      const chef = await this.getChefUseCase.execute(req.params.id)
+      res.status(200).json(chef)
+    } catch (error) {
+      // à faire idéalement dans chaque fonction (voir à faire une mise en commmun)
+      // const httpResponse = convertErrorsToHttpResponse(error)
+      // res.status(httpResponse.status).json(httpResponse.body)
+      console.log("Error");
+    }
+  }
+
+  // Delete Chef
+  async deleteChef(req: Request, res: Response) {
+    const chef = await this.deleteChefUseCase.execute(req.params.id)
+    res.status(200).json(chef)
+  }
+
+  // Update Chef
+  async updateChef(req: Request, res: Response) {
+    const chef = await this.updateChefUseCase.execute(req.params.id, req.body)
+    res.status(200).json(chef)
+  }
 }
+
 
 // function convertErrorsToHttpResponse(error: unknown) {
 //   // https://www.baeldung.com/rest-api-error-handling-best-practices
