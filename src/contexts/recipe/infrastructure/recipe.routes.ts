@@ -13,5 +13,7 @@ export function recipeRoutes(controller: RecipeController): Router {
   router.delete('/:id', controller.deleteRecipe.bind(controller))
   
   router.put('/:id', controller.updateRecipe.bind(controller))
+
+  router.get('/by-name/:name')
   return router
 }

@@ -5,7 +5,7 @@ import { toRecipeRaw } from './recipe.mapper'
 import { Prisma } from '@prisma/client'
 
 export class RecipeRepository implements IRecipeRepository {
-  constructor(private readonly database: RelationalDatabase) { }
+  constructor(private readonly database: RelationalDatabase) {}
 
   async addRecipe(recipe: RecipeCreateRaw): Promise<RecipeRaw> {
     const newRecipe = await this.database.client.recipe.create({
@@ -29,6 +29,11 @@ export class RecipeRepository implements IRecipeRepository {
   async getRecipe(id: string): Promise<Recipe | null> {
     const recipe = await this.database.client.recipe.findUnique({ where: { id }, include: { chef: true } })
     return recipe ? toRecipeRaw(recipe) : null
+  }
+
+  async getRecipeByName(name: string): Promise<RecipeRaw[]> {
+    const recipes = await this.database.client.recipe.findMany({ where: { name: name }, include: { chef: true } })
+    return recipes.map(toRecipeRaw)
   }
 
   async deleteRecipe(id: string): Promise<void> {

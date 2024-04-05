@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { AddRecipeUseCase, DeleteRecipeUseCase, GetRecipeUseCase, GetRecipesUseCase, UpdateRecipeUseCase } from '../../use-cases'
+import { AddRecipeUseCase, DeleteRecipeUseCase, GetRecipeUseCase, GetRecipesUseCase, UpdateRecipeUseCase, GetRecipeByNameUseCase } from '../../use-cases'
 import { RecipeNotFoundError } from '../../domains'
 import { internal, notFound } from '../../../../infrastructure'
 import { ValidationError, validate } from 'jsonschema'
@@ -27,7 +27,8 @@ export class RecipeController {
     private readonly addRecipeUseCase: AddRecipeUseCase,
     private readonly getRecipeUseCase: GetRecipeUseCase,
     private readonly deleteRecipeUseCase: DeleteRecipeUseCase,
-    private readonly updateRecipeUseCase: UpdateRecipeUseCase
+    private readonly updateRecipeUseCase: UpdateRecipeUseCase,
+    private readonly getRecipeByNameUseCase: GetRecipeByNameUseCase,
   ) { }
 
   // Gett all recipes
@@ -58,6 +59,18 @@ export class RecipeController {
   async getRecipe(req: Request, res: Response) {
     try {
       const recipe = await this.getRecipeUseCase.execute(req.params.id)
+      res.status(200).json(recipe)
+    } catch (error) {
+      // à faire idéalement dans chaque fonction (voir à faire une mise en commmun)
+      const httpResponse = convertErrorsToHttpResponse(error)
+      res.status(httpResponse.status).json(httpResponse.body)
+    }
+  }
+
+  // Get on recipe by name
+  async getByNameRecipe(req: Request, res: Response) {
+    try {
+      const recipe = await this.getRecipeByNameUseCase.execute(req.params.name)
       res.status(200).json(recipe)
     } catch (error) {
       // à faire idéalement dans chaque fonction (voir à faire une mise en commmun)

@@ -3,6 +3,7 @@ import { RecipeRepository, RelationalDatabase } from '../../../infrastructure/da
 import { AddRecipeUseCase, DeleteRecipeUseCase, GetRecipeUseCase, GetRecipesUseCase, UpdateRecipeUseCase } from '../use-cases'
 import { recipeRoutes } from './recipe.routes'
 import { RecipeController } from './controller'
+import { GetRecipeByNameUseCase } from '../use-cases/get-by-name-recipe/get-recipe-by-name.use-case'
 
 export type RecipeExternalDependencies = {
   database: RelationalDatabase
@@ -16,7 +17,8 @@ export const recipeInjector = (externalDependencies: RecipeExternalDependencies)
   const getRecipeUseCase = new GetRecipeUseCase(recipeRepository)
   const deleteRecipeUseCase = new DeleteRecipeUseCase(recipeRepository)
   const updateRecipeUseCase = new UpdateRecipeUseCase(recipeRepository)
-
+  const getByNameRecipe = new GetRecipeByNameUseCase(recipeRepository);
+  
   const recipeController = new RecipeController(
     getRecipesUseCase,
     addRecipeUseCase,
