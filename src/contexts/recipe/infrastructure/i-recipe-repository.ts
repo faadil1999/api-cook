@@ -11,5 +11,6 @@ export interface IRecipeRepository {
   getRecipe(id: string): Promise<RecipeRaw | null>
   getByNameRecipe(name: string): Promise<RecipeRaw[]>
   deleteRecipe(id: string): Promise<void>
+  paginateRecipes(pageNumber: number): Promise<RecipeRaw[]>;
   updateRecipe(recipe: RecipeUpdate): Promise<RecipeRaw>
 }

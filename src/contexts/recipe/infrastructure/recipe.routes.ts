@@ -15,5 +15,7 @@ export function recipeRoutes(controller: RecipeController): Router {
   router.put('/:id', controller.updateRecipe.bind(controller))
 
   router.get('/by-name/:name')
+
+  router.get('/paginated/:pageNumber', controller.paginateRecipes.bind(controller));
   return router
 }

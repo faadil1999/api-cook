@@ -26,6 +26,17 @@ export class RecipeRepository implements IRecipeRepository {
     return recipes.map(toRecipeRaw)
   }
 
+  async paginateRecipes(pageNumber: number): Promise<RecipeRaw[]> {
+    const paginatedRecipes = await this.database.client.recipe.findMany({
+      skip: 10 * (pageNumber - 1),
+      take: 10,
+      include: {
+        chef: true // Return all fields
+      }
+    })
+    return paginatedRecipes.map(toRecipeRaw);
+  }
+
   async getRecipe(id: string): Promise<Recipe | null> {
     const recipe = await this.database.client.recipe.findUnique({ where: { id }, include: { chef: true } })
     return recipe ? toRecipeRaw(recipe) : null

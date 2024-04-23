@@ -4,6 +4,7 @@ import { RecipeNotFoundError } from '../../domains'
 import { internal, notFound } from '../../../../infrastructure'
 import { ValidationError, validate } from 'jsonschema'
 import { ValidatorResult } from 'jsonschema'
+import { PaginateRecipesUseCase } from '../../use-cases/paginate-recipes/paginate-recipe.use-case'
 
 const recipeCreateSchema = {
   id: "/Recipe",
@@ -29,6 +30,7 @@ export class RecipeController {
     private readonly deleteRecipeUseCase: DeleteRecipeUseCase,
     private readonly updateRecipeUseCase: UpdateRecipeUseCase,
     private readonly getRecipeByNameUseCase: GetRecipeByNameUseCase,
+    private readonly paginateRecipesUseCase : PaginateRecipesUseCase,
   ) { }
 
   // Gett all recipes
@@ -90,7 +92,28 @@ export class RecipeController {
     const recipe = await this.updateRecipeUseCase.execute(req.params.id, req.body)
     res.status(200).json(recipe)
   }
+
+  async paginateRecipes(req: Request<{ pageNumber: number }>, res: Response) {
+    console.log(req.params.pageNumber);
+    const errors = [];
+    if (req.params.pageNumber < 1) {
+      errors.push({
+        code: 'INVALID_PAGE_NUMBER'
+      })
+    }
+    if (errors.length) {
+      res.status(400).json(errors);
+    }
+    try {
+      const recipes = await this.paginateRecipesUseCase.execute(req.params.pageNumber)
+      res.status(200).json(recipes)
+    } catch (error) {
+      res.status(400).json(error);
+    }
+  }
 }
+
+
 
 function convertErrorsToHttpResponse(error: unknown) {
   // https://www.baeldung.com/rest-api-error-handling-best-practices
