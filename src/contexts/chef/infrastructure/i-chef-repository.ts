@@ -10,5 +10,5 @@ export interface IChefRepository {
   addChef(chef: ChefCreateRaw): Promise<ChefRaw>
   getChef(id: string): Promise<ChefRaw | null>
   deleteChef(id: string): Promise<void>
-  updateChef(chef: ChefUpdate): Promise<ChefRaw>
+  updateChef(chef: ChefUpdateRaw): Promise<ChefRaw>
 }

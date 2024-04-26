@@ -1,4 +1,4 @@
-import { ChefCreateRaw, ChefRaw, IChefRepository } from '../../../../contexts/chef'
+import { ChefCreateRaw, ChefRaw, ChefUpdateRaw, IChefRepository } from '../../../../contexts/chef'
 import { Chef, ChefUpdate } from '../../../../contexts/chef/domains/types'
 import { RelationalDatabase } from '../../database'
 import { toChefRaw } from './chef.mapper'
@@ -9,7 +9,12 @@ export class ChefRepository implements IChefRepository {
   constructor(private readonly database: RelationalDatabase) {}
 
   async addChef(chef: ChefCreateRaw): Promise<ChefRaw> {
-    const newChef = await this.database.client.chef.create({ data: chef, include: { recipes: true } })
+    const newChef = await this.database.client.chef.create({ 
+      data: chef, 
+      include: { 
+        recipes: true 
+      } 
+    })
     return toChefRaw(newChef)
   }
 
@@ -41,7 +46,7 @@ export class ChefRepository implements IChefRepository {
     }
   }
 
-  async updateChef(chef: ChefUpdate): Promise<Chef> {
+  async updateChef(chef: ChefUpdateRaw): Promise<Chef> {
     const chefUpdated = await this.database.client.chef.update({
       where: { id: chef.id as string },
       data: chef,

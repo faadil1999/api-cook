@@ -65,7 +65,7 @@ export class RecipeRepository implements IRecipeRepository {
     }
   }
 
-  async updateRecipe(recipe: RecipeUpdate): Promise<Recipe> {
+  async updateRecipe(recipe: RecipeUpdateRaw): Promise<Recipe> {
     const recipeUpdated = await this.database.client.recipe.update({
       where: { id: recipe.id },
       data: recipe,

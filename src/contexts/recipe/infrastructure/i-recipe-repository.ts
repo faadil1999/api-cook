@@ -7,7 +7,7 @@ export type RecipeUpdateRaw = RecipeUpdate
 
 export interface IRecipeRepository {
   getAllRecipes(): Promise<RecipeRaw[]>
-  addRecipe(recipe: RecipeCreate): Promise<RecipeRaw>
+  addRecipe(recipe: RecipeCreateRaw): Promise<RecipeRaw>
   getRecipe(id: string): Promise<RecipeRaw | null>
   getRecipeByName(name: string): Promise<RecipeRaw[]>
   deleteRecipe(id: string): Promise<void>

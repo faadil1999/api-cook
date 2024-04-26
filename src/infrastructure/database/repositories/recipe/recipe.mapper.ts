@@ -6,6 +6,7 @@ export function toRecipeRaw(recipe: Recipe & { chef: Chef }): RecipeRaw {
     id: recipe.id,
     name: recipe.name,
     description: recipe.description,
+    // chefId: recipe.chef.id
     chef: {
       id: recipe.chef.id,
       first_name: recipe.chef.first_name,

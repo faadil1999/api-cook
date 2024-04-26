@@ -30,6 +30,25 @@ const chefCreateSchema = {
   required: ["first_name", "last_name", "recipes"]
 }
 
+const Joi = require('joi');
+
+const chefSchema = Joi.object({
+  id: Joi.number().required(),
+  name: Joi.string().required(),
+  specialty: Joi.string().required(),
+  experience: Joi.number().min(0)
+});
+
+const chefInputSchema = Joi.object({
+  name: Joi.string().required(),
+  specialty: Joi.string().required(),
+  experience: Joi.number().min(0).required()
+});
+
+const idSchema = Joi.object({
+  id: Joi.number().required()
+});
+
 export class ChefController {
   constructor(
     private readonly getChefsUseCase: GetChefsUseCase,
@@ -41,70 +60,79 @@ export class ChefController {
 
   async getChefs(req: Request, res: Response) {
     try {
-      const chefs = await this.getChefsUseCase.execute()
-      res.status(200).json(chefs)
+      const chefs = await this.getChefsUseCase.execute();
+      const { error } = Joi.array().items(chefSchema).validate(chefs);
+      if (error) {
+        return res.status(400).json(error.details);
+      }
+      return res.status(200).json(chefs);
     } catch(error) {
-      const httpResponse = convertErrorsToHttpResponse(error)
-      res.status(httpResponse.status).json(httpResponse.body)
+      console.error(error);
+      return res.status(500).json({ code: 'INTERNAL_SERVER_ERROR' });
+      // const httpResponse = convertErrorsToHttpResponse(error)
+      // res.status(httpResponse.status).json(httpResponse.body)
     }
   }
   
 
   async addChef(req: Request, res: Response) {
-    // const result = validate(req.body, chefCreateSchema)
-    // if (!result.valid) {
-    //   const errors = result.errors.map((error: ValidationError) => {
-    //     return {
-    //       message: error.message
-    //     }
-    //   })
-    //   res.status(400).json(errors)
-    // }
+    const { error } = chefInputSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json(error.details);
+    }
     try {
       const chef = await this.addChefUseCase.execute(req.body)
-      res.status(201).json(chef)
+      return res.status(201).json(chef)
     } catch (error: any) {
-      console.log(error)
-      // renvoyer la stacktrace à l'utilisateur n'est pas une bonne pratique
-      res.status(500).json([
-        {
-          code: 'INTERNAL_SERVER_ERROR'
-        }
-      ])
+      console.error(error);
+      return res.status(500).json({ code: 'INTERNAL_SERVER_ERROR' });
     }
   }
 
    // Get on chef by id
    async getChef(req: Request, res: Response) {
+    const { error } = idSchema.validate(req.params);
+    if (error) return res.status(400).json(error.details);
     try {
-      
-      const chef = await this.getChefUseCase.execute(req.params.id)
-      res.status(200).json(chef)
+      const chef = await this.getChefUseCase.execute(req.params.id);
+      return res.status(200).json(chef);
     } catch (error) {
-      // à faire idéalement dans chaque fonction (voir à faire une mise en commmun)
-      // const httpResponse = convertErrorsToHttpResponse(error)
-      // res.status(httpResponse.status).json(httpResponse.body)
-      console.log("Error");
+      console.error("Error", error);
+      return res.status(500).json({ code: 'INTERNAL_SERVER_ERROR' });
     }
   }
 
   // Delete Chef
   async deleteChef(req: Request, res: Response) {
-    const chef = await this.deleteChefUseCase.execute(req.params.id)
-    res.status(200).json(chef)
+    const { error } = idSchema.validate(req.params);
+    if (error) return res.status(400).json(error.details);
+    try {
+      const chef = await this.deleteChefUseCase.execute(req.params.id);
+      return res.status(200).json(chef);
+    } catch (error) {
+      console.error("Error", error);
+      return res.status(500).json({ code: 'INTERNAL_SERVER_ERROR' });
+    }
   }
 
   // Update Chef
   async updateChef(req: Request, res: Response) {
-    const chef = await this.updateChefUseCase.execute(req.params.id, req.body)
-    res.status(200).json(chef)
+    const { error } = idSchema.validate(req.params);
+    if (error) return res.status(400).json(error.details);
+    try {
+      const chef = await this.updateChefUseCase.execute(req.params.id, req.body);
+      return res.status(200).json(chef);
+    } catch (error) {
+      console.error("Error", error);
+      return res.status(500).json({ code: 'INTERNAL_SERVER_ERROR' });
+    }
   }
 }
 
 
-function convertErrorsToHttpResponse(error: unknown) {
-  if (error instanceof TagNotFoundError) {
-    return notFound({ message: error.message, code: 'tag-not-found', data: { id: error.id } })
-  }
-  return internal()
-}
+// function convertErrorsToHttpResponse(error: unknown) {
+//   if (error instanceof TagNotFoundError) {
+//     return notFound({ message: error.message, code: 'tag-not-found', data: { id: error.id } })
+//   }
+//   return internal()
+// }

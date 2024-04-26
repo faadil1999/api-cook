@@ -5,22 +5,25 @@ import { ValidationError, validate } from 'jsonschema'
 import { PaginateRecipesUseCase } from '../../use-cases/paginate-recipes/paginate-recipe.use-case'
 import { internal, notFound } from '../../../../infrastructure/http'
 
-const recipeCreateSchema = {
+const recipeSchema = {
   id: "/Recipe",
   type: "object",
   properties: {
-    name: {
-      type: "string"
-    },
-    description: {
-      type: "string"
-    },
-    chefId: {
-      type: "string"
-    },
+    name: { type: "string" },
+    description: { type: "string" },
+    chefId: { type: "string" }
   },
   required: ["name", "chefId", "description"]
-}
+};
+
+const idSchema = {
+  id: "/Id",
+  type: "object",
+  properties: {
+    id: { type: "string" }
+  },
+  required: ["id"]
+};
 export class RecipeController {
   constructor(
     private readonly getRecipesUseCase: GetRecipesUseCase,
@@ -40,31 +43,34 @@ export class RecipeController {
 
   // Add recipe to db
   async addRecipe(req: Request, res: Response) {
-    // mettre une validation pour chaque endpoint, bien gérer l'objet d'erreur (ici fait un peu à la va vite)
-    console.log(res);
-    const result = validate(req.body, recipeCreateSchema)
+    // mettre une validation pour chaque endpoint, bien gérer l'objet d'erreur (ici fait un peu à la va vite
+    const result = validate(req.body, recipeSchema);
     if (!result.valid) {
-      const errors = result.errors.map((error: ValidationError) => {
-        return {
-          message: error.message
-        }
-      })
-      return res.status(400).json(errors)
+      return res.status(400).json(result.errors.map(error => ({ message: error.message })));
     }
 
-    const recipe = await this.addRecipeUseCase.execute(req.body)
-    res.status(201).json(recipe)
+    try {
+      const recipe = await this.addRecipeUseCase.execute(req.body);
+      return res.status(201).json(recipe);
+    } catch (error) {
+      const httpResponse = convertErrorsToHttpResponse(error);
+      return res.status(httpResponse.status).json(httpResponse.body);
+    }
   }
 
   // Get on recipe by id
   async getRecipe(req: Request, res: Response) {
+    const idValidation = validate(req.params, idSchema);
+    if (!idValidation.valid) {
+      return res.status(400).json(idValidation.errors.map(error => ({ message: error.message })));
+    }
+
     try {
-      const recipe = await this.getRecipeUseCase.execute(req.params.id)
-      res.status(200).json(recipe)
+      const recipe = await this.getRecipeUseCase.execute(req.params.id);
+      return res.status(200).json(recipe);
     } catch (error) {
-      // à faire idéalement dans chaque fonction (voir à faire une mise en commmun)
-      const httpResponse = convertErrorsToHttpResponse(error)
-      res.status(httpResponse.status).json(httpResponse.body)
+      const httpResponse = convertErrorsToHttpResponse(error);
+      return res.status(httpResponse.status).json(httpResponse.body);
     }
   }
 
@@ -82,14 +88,39 @@ export class RecipeController {
 
   // Delete Recipe
   async deleteRecipe(req: Request, res: Response) {
-    const recipe = await this.deleteRecipeUseCase.execute(req.params.id)
-    res.status(200).json(recipe)
+    const idValidation = validate(req.params, idSchema);
+    if (!idValidation.valid) {
+      return res.status(400).json(idValidation.errors.map(error => ({ message: error.message })));
+    }
+
+    try {
+      const recipe = await this.deleteRecipeUseCase.execute(req.params.id);
+      return res.status(200).json(recipe);
+    } catch (error) {
+      const httpResponse = convertErrorsToHttpResponse(error);
+      return res.status(httpResponse.status).json(httpResponse.body);
+    }
   }
 
   // Update Recipe
   async updateRecipe(req: Request, res: Response) {
-    const recipe = await this.updateRecipeUseCase.execute(req.params.id, req.body)
-    res.status(200).json(recipe)
+    const idValidation = validate(req.params, idSchema);
+    if (!idValidation.valid) {
+      return res.status(400).json(idValidation.errors.map(error => ({ message: error.message })));
+    }
+
+    const bodyValidation = validate(req.body, recipeSchema);
+    if (!bodyValidation.valid) {
+      return res.status(400).json(bodyValidation.errors.map(error => ({ message: error.message })));
+    }
+
+    try {
+      const recipe = await this.updateRecipeUseCase.execute(req.params.id, req.body);
+      return res.status(200).json(recipe);
+    } catch (error) {
+      const httpResponse = convertErrorsToHttpResponse(error);
+      return res.status(httpResponse.status).json(httpResponse.body);
+    }
   }
 
   async paginateRecipes(req: Request<{ pageNumber: number }>, res: Response) {
@@ -115,9 +146,8 @@ export class RecipeController {
 
 
 function convertErrorsToHttpResponse(error: unknown) {
-  // https://www.baeldung.com/rest-api-error-handling-best-practices
   if (error instanceof RecipeNotFoundError) {
-    return notFound({ message: error.message, code: 'recipe-not-found', data: { id: error.id } })
+    return notFound({ message: error.message, code: 'recipe-not-found', data: { id: error.id } });
   }
-  return internal()
+  return internal();
 }
