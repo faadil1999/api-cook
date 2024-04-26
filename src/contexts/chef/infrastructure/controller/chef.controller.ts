@@ -3,6 +3,9 @@ import { Request, Response } from 'express'
 import { AddChefUseCase, GetChefsUseCase } from '../../use-cases'
 import { GetChefUseCase } from '../../use-cases/get-chef'
 import { DeleteChefUseCase } from '../../use-cases/delete-chef'
+import { TagNotFoundError } from '../../domains/errors';
+import { internal, notFound } from '../../../../infrastructure/http';
+import { ValidationError, validate } from 'jsonschema';
 
 const chefCreateSchema = {
   id: "/Chef",
@@ -37,14 +40,29 @@ export class ChefController {
   ) {}
 
   async getChefs(req: Request, res: Response) {
-    const chefs = await this.getChefsUseCase.execute()
-    res.status(200).json(chefs)
+    try {
+      const chefs = await this.getChefsUseCase.execute()
+      res.status(200).json(chefs)
+    } catch(error) {
+      const httpResponse = convertErrorsToHttpResponse(error)
+      res.status(httpResponse.status).json(httpResponse.body)
+    }
   }
+  
 
   async addChef(req: Request, res: Response) {
+    // const result = validate(req.body, chefCreateSchema)
+    // if (!result.valid) {
+    //   const errors = result.errors.map((error: ValidationError) => {
+    //     return {
+    //       message: error.message
+    //     }
+    //   })
+    //   res.status(400).json(errors)
+    // }
     try {
-      const Chef = await this.addChefUseCase.execute(req.body)
-      res.status(201).json(Chef)
+      const chef = await this.addChefUseCase.execute(req.body)
+      res.status(201).json(chef)
     } catch (error: any) {
       console.log(error)
       // renvoyer la stacktrace à l'utilisateur n'est pas une bonne pratique
@@ -84,10 +102,9 @@ export class ChefController {
 }
 
 
-// function convertErrorsToHttpResponse(error: unknown) {
-//   // https://www.baeldung.com/rest-api-error-handling-best-practices
-//   if (error instanceof TagNotFoundError) {
-//     return notFound({ message: error.message, code: 'tag-not-found', data: { id: error.id } })
-//   }
-//   return internal()
-// }
+function convertErrorsToHttpResponse(error: unknown) {
+  if (error instanceof TagNotFoundError) {
+    return notFound({ message: error.message, code: 'tag-not-found', data: { id: error.id } })
+  }
+  return internal()
+}
