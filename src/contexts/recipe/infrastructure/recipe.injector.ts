@@ -1,10 +1,11 @@
 import { Router } from 'express'
-import { RecipeRepository, RelationalDatabase } from '../../../infrastructure/database'
+import { RecipeRepository } from '../../../infrastructure/database'
 import { AddRecipeUseCase, DeleteRecipeUseCase, GetRecipeUseCase, GetRecipesUseCase, UpdateRecipeUseCase } from '../use-cases'
 import { recipeRoutes } from './recipe.routes'
 import { RecipeController } from './controller'
 import { GetRecipeByNameUseCase } from '../use-cases/get-by-name-recipe/get-recipe-by-name.use-case'
 import { PaginateRecipesUseCase } from '../use-cases/paginate-recipes/paginate-recipe.use-case'
+import { RelationalDatabase } from '../../../infrastructure/database/database'
 
 export type RecipeExternalDependencies = {
   database: RelationalDatabase
@@ -18,8 +19,9 @@ export const recipeInjector = (externalDependencies: RecipeExternalDependencies)
   const getRecipeUseCase = new GetRecipeUseCase(recipeRepository)
   const deleteRecipeUseCase = new DeleteRecipeUseCase(recipeRepository)
   const updateRecipeUseCase = new UpdateRecipeUseCase(recipeRepository)
-  const getByNameRecipe = new GetRecipeByNameUseCase(recipeRepository);
+  const getRecipeByName = new GetRecipeByNameUseCase(recipeRepository);
   const paginateRecipe = new PaginateRecipesUseCase(recipeRepository);
+
   
   const recipeController = new RecipeController(
     getRecipesUseCase,
@@ -27,7 +29,7 @@ export const recipeInjector = (externalDependencies: RecipeExternalDependencies)
     getRecipeUseCase,
     deleteRecipeUseCase,
     updateRecipeUseCase,
-    getByNameRecipe,
+    getRecipeByName,
     paginateRecipe,
   )
 

@@ -11,7 +11,8 @@ export function toChefRaw(chef: Chef & { recipes: Recipe[] }): ChefRaw {
     recipes: chef.recipes.map((recipe: Recipe) => ({
       id: recipe.id,
       name: recipe.name,
-      description: recipe.description
+      description: recipe.description,
+      chefId: chef.id
     }))
   }
 }

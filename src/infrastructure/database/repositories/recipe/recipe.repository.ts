@@ -1,5 +1,5 @@
-import { RecipeCreateRaw, RecipeNotFoundError, RecipeRaw, IRecipeRepository } from '../../../../contexts/recipe'
 import { Recipe, RecipeUpdate } from '../../../../contexts/recipe/domains/types'
+import { IRecipeRepository, RecipeCreateRaw, RecipeRaw } from '../../../../contexts/recipe/infrastructure'
 import { RelationalDatabase } from '../../database'
 import { toRecipeRaw } from './recipe.mapper'
 import { Prisma } from '@prisma/client'
