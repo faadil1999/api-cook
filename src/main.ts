@@ -1,8 +1,9 @@
 import { config } from './config'
-import { RelationalDatabase } from './infrastructure/database/database'
+import { RelationalDatabase } from './infrastructure/database'
 import { ExternalDependencies } from './infrastructure/routes'
 import { Server } from './infrastructure/server'
-;(async () => {
+
+(async () => {
   process.on('unhandledRejection', err => {
     // eslint-disable-next-line no-console
     console.log(err)

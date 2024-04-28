@@ -1,10 +1,9 @@
 import { Request, Response } from 'express'
 import { AddRecipeUseCase, DeleteRecipeUseCase, GetRecipeUseCase, GetRecipesUseCase, UpdateRecipeUseCase, GetRecipeByNameUseCase } from '../../use-cases'
 import { RecipeNotFoundError } from '../../domains'
-import { internal, notFound } from '../../../../infrastructure'
 import { ValidationError, validate } from 'jsonschema'
-import { ValidatorResult } from 'jsonschema'
 import { PaginateRecipesUseCase } from '../../use-cases/paginate-recipes/paginate-recipe.use-case'
+import { internal, notFound } from '../../../../infrastructure/http'
 
 const recipeCreateSchema = {
   id: "/Recipe",

@@ -43,7 +43,7 @@ export class ChefRepository implements IChefRepository {
 
   async updateChef(chef: ChefUpdate): Promise<Chef> {
     const chefUpdated = await this.database.client.chef.update({
-      where: { id: chef.id },
+      where: { id: chef.id as string },
       data: chef,
       include: { recipes: true }
     })

@@ -1,4 +1,3 @@
-import { Chef } from '../../domains'
 import { IChefRepository } from '../../infrastructure'
 
 export class DeleteChefUseCase {

@@ -1,3 +1,5 @@
+import { type Prisma } from '@prisma/client'
+
 export type Chef = {
   id: string
   first_name: string
@@ -13,6 +15,7 @@ export type Recipe = {
   chef: Chef
 }
 
-export type RecipeCreate = Omit<Recipe, 'id' | 'chef'> & { recipeId: string }
+// export type RecipeCreate = Omit<Recipe, 'id'>
+export type RecipeCreate = Prisma.RecipeCreateInput
 
-export type RecipeUpdate = Omit<Recipe, 'recipe'>
+export type RecipeUpdate = Omit<Recipe, 'chef'>
