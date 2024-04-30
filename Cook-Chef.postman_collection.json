@@ -1,0 +1,505 @@
+{
+	"info": {
+		"_postman_id": "31f3a9bf-1068-48ec-84ca-ff6546a4c474",
+		"name": "Cook/Chef",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18045044"
+	},
+	"item": [
+		{
+			"name": "Recipes",
+			"item": [
+				{
+					"name": "Get all recipes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One recipe",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/recipe/cad516fa-e304-4dc9-8690-93a4e602d9de",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								"recipe",
+								"cad516fa-e304-4dc9-8690-93a4e602d9de"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One recipe (JOI error)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/recipe/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								"recipe",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Recipe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Atieke\",\r\n    \"description\":\"Ssuce avec des legume manioc et cube maggie\",\r\n    \"chefId\":\"8ba42587-2ba5-4580-90a6-656a93730879\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Recipe (JOI error )",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\":\"Ssuce avec des legume manioc et cube maggie\",\r\n    \"chefId\":\"8ba42587-2ba5-4580-90a6-656a93730879\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update recipe",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"Sauce555 avec des legume ecrasee a linterieure\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/recipe/081673d7-56a5-433a-a5ea-8548c75fbdf1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								"recipe",
+								"081673d7-56a5-433a-a5ea-8548c75fbdf1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update recipe (JOI error)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"Sauce555 avec des legume ecrasee a linterieure\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/recipe/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								"recipe",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete recipe",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/recipe/4b795ff2-86ae-48fb-9b48-d998c9a7b9eb",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								"recipe",
+								"4b795ff2-86ae-48fb-9b48-d998c9a7b9eb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Paginated Recipe",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/paginated/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								"paginated",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update chef",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \"last_name\": \"El Chami\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3002/api/chefs/chef/8ba42587-2ba5-4580-90a6-656a93730879",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"chefs",
+								"chef",
+								"8ba42587-2ba5-4580-90a6-656a93730879"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Paginated Recipe (JOI error)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/paginated/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								"paginated",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRecipeByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/recipes/recipe/by-name/kousa",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"recipes",
+								"recipe",
+								"by-name",
+								"kousa"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chefs",
+			"item": [
+				{
+					"name": "Get all chef",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/chefs/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"chefs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update chef (JOI error)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \"last_name\": \"El Chami\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3002/api/chefs/chef/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"chefs",
+								"chef",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one chef",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/chefs/chef/ec4be1d3-ba6f-4b03-a202-9f6b7b30c6ed",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"chefs",
+								"chef",
+								"ec4be1d3-ba6f-4b03-a202-9f6b7b30c6ed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get one chef Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/chefs/chef/0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"chefs",
+								"chef",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete chef",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/api/chefs/chef/64b6f6f1-5162-474a-9d42-887f113547c5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"chefs",
+								"chef",
+								"64b6f6f1-5162-474a-9d42-887f113547c5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add chef",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \"first_name\": \"Goldl\",\r\n        \"last_name\": \"POlo556\",\r\n        \"phone\": \"85555566\",\r\n        \"country\": \"France\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3002/api/chefs/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"chefs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add chef (JOI error)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \"last_name\": \"POlo556\",\r\n        \"phone\": \"85555566\",\r\n        \"country\": \"France\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3002/api/chefs/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"api",
+								"chefs",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
