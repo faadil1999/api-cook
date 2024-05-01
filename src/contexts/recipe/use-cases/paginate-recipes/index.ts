@@ -1,0 +1,1 @@
+export * from './paginate-recipe.use-case'

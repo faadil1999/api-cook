@@ -3,7 +3,6 @@ import { Request, Response } from 'express'
 import { AddChefUseCase, GetChefsUseCase } from '../../use-cases'
 import { GetChefUseCase } from '../../use-cases/get-chef'
 import { DeleteChefUseCase } from '../../use-cases/delete-chef'
-import { TagNotFoundError } from '../../domains/errors';
 import { internal, notFound } from '../../../../infrastructure/http';
 import { ValidationError, validate } from 'jsonschema';
 
@@ -24,7 +23,10 @@ const chefCreateSchema = {
       type: "string"
     },
     recipes: {
-      type: "Recipe"
+      type: "array",
+      items: {
+        type: "object"
+      }
     },
   },
   required: ["first_name", "last_name", "recipes"]
@@ -32,21 +34,16 @@ const chefCreateSchema = {
 
 const Joi = require('joi');
 
-const chefSchema = Joi.object({
-  id: Joi.number().required(),
-  name: Joi.string().required(),
-  specialty: Joi.string().required(),
-  experience: Joi.number().min(0)
-});
-
 const chefInputSchema = Joi.object({
-  name: Joi.string().required(),
-  specialty: Joi.string().required(),
-  experience: Joi.number().min(0).required()
+  first_name: Joi.string().required(),
+  last_name: Joi.string().required(),
+  phone: Joi.string(),
+  country: Joi.string(),
+  recipes: Joi.array().items(Joi.object())
 });
 
 const idSchema = Joi.object({
-  id: Joi.number().required()
+  id: Joi.string().required()
 });
 
 export class ChefController {
@@ -61,16 +58,10 @@ export class ChefController {
   async getChefs(req: Request, res: Response) {
     try {
       const chefs = await this.getChefsUseCase.execute();
-      const { error } = Joi.array().items(chefSchema).validate(chefs);
-      if (error) {
-        return res.status(400).json(error.details);
-      }
       return res.status(200).json(chefs);
     } catch(error) {
       console.error(error);
       return res.status(500).json({ code: 'INTERNAL_SERVER_ERROR' });
-      // const httpResponse = convertErrorsToHttpResponse(error)
-      // res.status(httpResponse.status).json(httpResponse.body)
     }
   }
   
@@ -128,11 +119,3 @@ export class ChefController {
     }
   }
 }
-
-
-// function convertErrorsToHttpResponse(error: unknown) {
-//   if (error instanceof TagNotFoundError) {
-//     return notFound({ message: error.message, code: 'tag-not-found', data: { id: error.id } })
-//   }
-//   return internal()
-// }

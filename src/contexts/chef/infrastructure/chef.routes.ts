@@ -7,10 +7,10 @@ export function chefRoutes(controller: ChefController): Router {
 
   router.post('/', controller.addChef.bind(controller))
 
-  router.get('/:id', controller.getChef.bind(controller))
+  router.get('/chef/:id', controller.getChef.bind(controller))
   
-  router.delete('/:id', controller.deleteChef.bind(controller))
+  router.delete('/chef/:id', controller.deleteChef.bind(controller))
   
-  router.put('/:id', controller.updateChef.bind(controller))
+  router.put('/chef/:id', controller.updateChef.bind(controller))
   return router
 }

@@ -9,8 +9,8 @@ export type ExternalDependencies = RecipeExternalDependencies
 export const getRoutes: GetRoutes = (externalDependencies: ExternalDependencies): Router[] => {
   // Main routes
   return [
-    Router().use('/recipe', recipeInjector(externalDependencies)),
-    Router().use('/chef', chefInjector(externalDependencies))
+    Router().use('/recipes', recipeInjector(externalDependencies)),
+    Router().use('/chefs', chefInjector(externalDependencies))
   ]
 }
 
